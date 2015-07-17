@@ -1,0 +1,46 @@
+.container {
+    margin-top: 20px;
+}
+
+#movies form {
+    display: inline-table;
+}
+
+.movie {
+    position: relative;
+    margin: 5px;
+    width: 162px;
+    height: 240px;
+    border: 1px solid #bbb;
+    padding: 5px;
+    background-color: #dddddd;
+    border-radius: 10px;
+    box-shadow: gray 2px 2px 2px 2px;
+}
+
+.movie-title {
+    text-align: center;
+}
+
+.movie img {
+    position: absolute;
+    bottom: 5px;
+    left: 35px;
+}
+
+.favorite-button-add {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    background: url("../images/unstar.png") no-repeat;
+    margin-left: 70px;
+}
+
+.favorite-button-remove {
+    background: url("../images/star.png") no-repeat;
+}
+
+#favoriteList {
+    height: 26px;
+    min-width: 145px;
+}
