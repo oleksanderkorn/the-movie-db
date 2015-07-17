@@ -40,7 +40,11 @@
     background: url("../images/star.png") no-repeat;
 }
 
-#favoriteList {
-    height: 26px;
-    min-width: 145px;
+.form-control {
+    display: inline-block!important;
+    width: 75%!important;
+}
+
+.btn {
+    height: 34px;
 }

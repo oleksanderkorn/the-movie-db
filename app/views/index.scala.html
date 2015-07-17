@@ -1,39 +1,50 @@
-<!DOCTYPE html ng-app="themoviedbApp">
-<html>
+<!DOCTYPE html>
+<html ng-app="themoviedbApp">
     <head>
         <title>Search movies</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap-theme.css")">
+        <script src="@routes.Assets.versioned("javascripts/jquery-2.1.4.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/bootstrap.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/angular.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/ui-bootstrap-tpls-0.13.0.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/app.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/controllers.js")" type="text/javascript"></script>
+        <script>
+
+        </script>
     </head>
 
-    <body ng-controller="MovieCtrl">
+    <body ng-controller="MoviesCtrl">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 search-movies">
-                    <input id="query" type="text" name="query">
-                    <button id="search">Search</button>
+                    <input class="form-control" id="query" type="text" name="query">
+                    <button ng-click="searchMovies()" class="btn btn-primary btn-sm" id="search">Search</button>
                 </div>
                 <div class="col-md-4 add-list">
-                    @helper.form(action = routes.Application.addList) {
-                        <input type="text" name="listName">
-                        <button id="createList">New list</button>
-                    }
+                @helper.form(action = routes.Application.addList) {
+                    <input class="form-control" type="text" name="listName">
+                    <button class="btn btn-success btn-sm" id="createList">New list</button>
+                }
                 </div>
-                <div class="col-md-4 open-list">
-                    <select id="favoriteList"></select>
-                    <button id="openList">Open list</button>
+                <div class="col-md-4 open-list form-group">
+                    <select class="form-control" id="favoriteList"></select>
+                    <button class="btn btn-info btn-sm" id="openList">Open list</button>
                 </div>
             </div>
-
             <div class="row" id="movies">
 
+            </div>
+            <div class="row">
+                <ul>
+                    <li ng-repeat="mov in movieList">
+                        <span>{{mov.title}}</span>
+                        <p>{{mov.poster_path}}</p>
+                    </li>
+                </ul>
             </div>
         </div>
     </body>
