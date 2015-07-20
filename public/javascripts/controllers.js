@@ -1,4 +1,4 @@
-angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', function ($scope, $http) {
+angular.module('themoviedbApp', ['ui.bootstrap', 'ui.router']).controller('MoviesCtrl', function ($scope, $http, $location, $state) {
     $scope.currentSearchText;
     $scope.movieList = [];
     $scope.currentPage = 1;
@@ -7,6 +7,7 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
     $scope.itemsPerPage = 20;
     $scope.maxSearchResult = 20000;
     $scope.favoriteList;
+    $scope.currentList;
 
     $scope.setPage = function (pageNo) {
         $scope.currentPage = pageNo;
@@ -21,7 +22,9 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
     };
 
     $scope.searchMovies = function () {
-        $('.noSearchValue').hide();
+        $('.no-search-value').hide();
+        $location.path("/");
+        $scope.currentList = null;
         $scope.currentPage = 1;
         $scope.currentSearchText = $('#query').val();
         if ($scope.currentSearchText) {
@@ -33,7 +36,7 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
                 $scope.$apply();
             });
         } else {
-            $('.noSearchValue').show();
+            $('.no-search-value').show();
         }
     };
 
@@ -57,7 +60,7 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
     };
 
     $scope.addMovieToFavorites = function ($index, mov, $event) {
-        if($('#favoriteList').val() != null) {
+        if ($('#favoriteList').val() != null) {
             var clicked = event.target;
             var data = {
                 title: mov.title,
@@ -68,15 +71,13 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
                 method: 'POST',
                 url: "/movie",
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                transformRequest: function(obj) {
+                transformRequest: function (obj) {
                     var str = [];
-                    for(var p in obj)
+                    for (var p in obj)
                         str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
                     return str.join("&");
                 },
                 data: data
-            }).success(function () {
-                $(clicked).addClass('favorite-button-remove');
             });
         } else {
             alert("Create a list first.");
@@ -84,23 +85,57 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
     };
 
     $scope.createList = function () {
-        $http({
-            method: 'POST',
-            url: "/list",
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            transformRequest: function(obj) {
-                var str = [];
-                for(var p in obj)
-                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                return str.join("&");
-            },
-            data: {listName : $("input[name='listName']").val()}
-        }).success(function() {
-            $scope.readFavoriteList();
+        if ($("input[name='listName']").val()) {
+            $('.no-list-name').hide();
+            $http({
+                method: 'POST',
+                url: "/list",
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                transformRequest: function (obj) {
+                    var str = [];
+                    for (var p in obj)
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    return str.join("&");
+                },
+                data: {listName: $("input[name='listName']").val()}
+            }).success(function () {
+                $scope.readFavoriteList();
+                $('.no-list-exist').hide();
+                $("input[name='listName']").val('');
+            });
+        } else {
+            $('.no-list-name').show();
+        }
+    };
+
+    $scope.openFavoriteList = function (listIdFromUrl) {
+        if ($('#favoriteList').val() || listIdFromUrl) {
+            $scope.totalItems = 0;
+            $scope.movieList = [];
+            var listId = listIdFromUrl ? listIdFromUrl : $('#favoriteList').find(":selected").attr("listId");
+            $("option[listid]").removeAttr('selected');
+            $("option[listid]").each(function () {
+                if ($(this).attr('listId') == listId) {
+                    $(this).attr('selected', "selected");
+                }
+            });
+            var data = {listId: listId};
+            $.get("/favorite", data, function (list) {
+                $state.go("favorite");
+                $scope.currentList = list;
+                $location.path("/favorite/" + listId);
+                $scope.$apply()
+            });
+        } else {
+            $('.no-list-exist').show();
+        }
+    };
+}).config(function ($stateProvider, $urlRouterProvider) {
+    $stateProvider
+        .state('favorite', {
+            url: "/favorite/:id",
+            templateUrl: "/assets/html/favorite.html",
+            controller: 'MoviesCtrl'
         });
-    };
-
-    $scope.openFavoriteList = function () {
-
-    };
+    $urlRouterProvider.otherwise("/");
 });

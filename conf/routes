@@ -11,7 +11,7 @@ GET         /lists               controllers.Application.lists
 
 POST        /list                controllers.Application.addList
 
-GET         /favorite            controllers.Application.openList
+GET         /favorite            controllers.Application.getListToOpen
 
 GET         /movies              controllers.Application.searchMovies
 

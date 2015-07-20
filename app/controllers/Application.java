@@ -1,14 +1,11 @@
 package controllers;
 
 import com.avaje.ebean.Model;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import model.FavoriteList;
 import model.FavoriteMovie;
 import play.data.Form;
 import play.libs.F;
 import play.libs.ws.WSClient;
-import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
@@ -23,24 +20,28 @@ public class Application extends Controller {
     @Inject
     private WSClient ws;
 
-    public static final String SEARCH_MOVIES_URL = "http://api.themoviedb.org/3/search/movie?api_key=7a4de0fe5da237bdb52d1168dae8cd14&query=";
+    public static final String SEARCH_MOVIES_URL = "http://api.themoviedb.org/3/search/movie?api_key=fb92ed0bac9cfafe54830e26abe791df&query=";
     public static final String QUERY = "query";
     public static final String PAGE = "page";
 
-    public Result searchMovies() {
+    public F.Promise<Result> searchMovies() {
         String query = Form.form(String.class).bindFromRequest().data().get(QUERY) != null
                 ? Form.form(String.class).bindFromRequest().data().get(QUERY).replace(" ", "+") : "";
-
         query += Form.form(String.class).bindFromRequest().data().get(PAGE) != null
-                ? "&page=" + Form.form(String.class).bindFromRequest().data().get(PAGE) : "";
+                ? "&" + PAGE + "=" + Form.form(String.class).bindFromRequest().data().get(PAGE) : "";
 
-        F.Promise<JsonNode> jsonPromise = ws.url(SEARCH_MOVIES_URL + query).get().map(WSResponse::asJson);
-        JsonNode results = jsonPromise.get(500);
+        F.Promise<Result> promise = ws.url(SEARCH_MOVIES_URL + query).get().map((r) -> {
+            if (r.getStatus() == 200) {
+                return ok(r.asJson());
+            } else {
+                return badRequest("Bad request");
+            }
+        });
 
-        return ok(results);
+        return promise;
     }
 
-    public Result openList() {
+    public Result getListToOpen() {
         FavoriteList list = Form.form(FavoriteList.class).bindFromRequest().get();
         list = (FavoriteList) new Model.Finder(FavoriteList.class).byId(list.listId);
         return ok(toJson(list));
@@ -49,7 +50,7 @@ public class Application extends Controller {
     public Result addList() {
         FavoriteList favoriteList = Form.form(FavoriteList.class).bindFromRequest().get();
         favoriteList.save();
-        return redirect(routes.Application.index());
+        return created();
     }
 
     public Result addMovie() {
@@ -60,7 +61,7 @@ public class Application extends Controller {
         movie.save();
         list.movies.add(movie);
         list.save();
-        return redirect(routes.Application.index());
+        return created();
     }
 
     public Result lists() {

@@ -20,7 +20,7 @@ public class ApplicationTest {
 
     @Test
     public void renderTemplate() {
-        Content html = (Content) views.html.index.render("Hello Play!!");
+        Content html = (Content) views.html.index.render();
         assertEquals("text/html", html.contentType());
         assertTrue(contentAsString(html).contains("Hello Play!"));
     }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="themoviedbApp">
     <head>
+        <base href="/">
         <title>Search movies</title>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
@@ -9,48 +10,47 @@
         <script src="@routes.Assets.versioned("javascripts/jquery-2.1.4.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/bootstrap.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/angular.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/angular-ui-router.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/ui-bootstrap-tpls-0.13.0.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.versioned("javascripts/app.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/controllers.js")" type="text/javascript"></script>
-        <script>
-
-        </script>
     </head>
 
     <body ng-controller="MoviesCtrl" ng-init="readFavoriteList()">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 search-movies">
-                    <input class="form-control" id="query" type="text" name="query">
-                    <button ng-click="searchMovies()" class="btn btn-primary btn-sm" id="search">Search</button>
-                    <div class="noSearchValue">Please type here a movie title.</div>
+                <div class="row">
+                    <div class="col-md-4 index-movies">
+                        <input class="form-control" id="query" type="text" name="query">
+                        <button ng-click="searchMovies()" class="btn btn-primary btn-sm" id="index">Search</button>
+                        <div class="no-search-value">Please type here a movie title.</div>
+                    </div>
+                    <div class="col-md-4 add-list">
+                        <input class="form-control" type="text" name="listName">
+                        <button ng-click="createList()" class="btn btn-success btn-sm" id="createList">New list</button>
+                        <div class="no-list-name">Please enter a list name.</div>
+                    </div>
+                    <div class="col-md-4 open-list form-group">
+                        <select class="form-control" id="favoriteList">
+                            <option ng-repeat="favListItem in favoriteList"
+                            value="$index" listId="{{favListItem.listId}}">{{favListItem.listName}}</option>
+                        </select>
+                            <button ng-click="openFavoriteList()" class="btn btn-info btn-sm" id="openList">Open list</button>
+                            <div class="no-list-exist">There is no any list yet.</div>
+                    </div>
                 </div>
-                <div class="col-md-4 add-list">
-                    <input class="form-control" type="text" name="listName">
-                    <button ng-click="createList()" class="btn btn-success btn-sm" id="createList">New list</button>
-                </div>
-                <div class="col-md-4 open-list form-group">
-                    <select class="form-control" id="favoriteList">
-                        <option ng-repeat="favListItem in favoriteList"
-                        value="$index" listId="1">{{favListItem.listName}}</option>
-                    </select>
-                    <button class="btn btn-info btn-sm" id="openList">Open list</button>
-                </div>
-            </div>
-
+            <hr/>
             <div class="pagination-row">
                 <pagination boundary-links="true" ng-show="totalItems != 0" total-items="totalItems" max-size="maxSize"
                 items-per-page="itemsPerPage" ng-model="currentPage" ng-change="changePage()"></pagination>
             </div>
-
             <div class="row" id="movies">
                 <div ng-repeat="mov in movieList" class="movie">
-                    <div id="$index" ng-click="addMovieToFavorites($index, mov, $event)" class='favorite-button-add'></div>
+                    <button id="$index" class="btn btn-default btn-sm add-to-favorite" ng-click="addMovieToFavorites($index, mov, $event)">Add to favorite</button>
                     <div class='movie-title'>{{mov.title}}</div>
                     <img name="posterPath" ng-src="{{mov.poster_path}}">
                 </div>
             </div>
 
+            <div ui-view> </div>
         </div>
     </body>
 </html>

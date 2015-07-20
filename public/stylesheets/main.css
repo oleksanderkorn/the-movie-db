@@ -1,3 +1,7 @@
+h1 {
+    text-align: center;
+}
+
 .container {
     margin-top: 20px;
 }
@@ -26,21 +30,13 @@
     border-radius: 10px;
 }
 
-.favorite-button-add {
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    background: url("../images/unstar.png") no-repeat;
-    margin-left: 70px;
-}
-
-.favorite-button-remove {
-    background: url("../images/star.png") no-repeat;
+.add-to-favorite {
+    margin-left: 25px;
 }
 
 .form-control {
-    display: inline-block!important;
-    width: 75%!important;
+    display: inline-block !important;
+    width: 75% !important;
 }
 
 .btn {
@@ -52,6 +48,8 @@
     text-align: center;
 }
 
-.noSearchValue {
+.no-search-value,
+.no-list-exist,
+.no-list-name {
     display: none;
 }
