@@ -45,7 +45,7 @@
 
             <div class="row" id="movies">
                 <div ng-repeat="mov in movieList" class="movie">
-                    <div id="$index" ng-click="addMovieToFavorites($index, mov)" class='favorite-button-add'></div>
+                    <div id="$index" ng-click="addMovieToFavorites($index, mov, $event)" class='favorite-button-add'></div>
                     <div class='movie-title'>{{mov.title}}</div>
                     <img name="posterPath" ng-src="{{mov.poster_path}}">
                 </div>

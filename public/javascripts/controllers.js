@@ -56,14 +56,14 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
         });
     };
 
-    $scope.addMovieToFavorites = function ($index, mov) {
+    $scope.addMovieToFavorites = function ($index, mov, $event) {
         if($('#favoriteList').val() != null) {
+            var clicked = event.target;
             var data = {
                 title: mov.title,
                 posterPath: mov.poster_path,
                 listId: $('#favoriteList').find(":selected").attr("listId")
             };
-            console.log(data);
             $http({
                 method: 'POST',
                 url: "/movie",
@@ -75,6 +75,8 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
                     return str.join("&");
                 },
                 data: data
+            }).success(function () {
+                $(clicked).addClass('favorite-button-remove');
             });
         } else {
             alert("Create a list first.");
