@@ -1,4 +1,4 @@
-h1 {
+h2 {
     text-align: center;
 }
 
@@ -9,8 +9,8 @@ h1 {
 .movie {
     position: relative;
     margin: 3px;
-    width: 160px;
-    height: 240px;
+    width: 155px;
+    height: 250px;
     border: 1px solid #bbb;
     padding: 5px;
     background-color: #dddddd;
@@ -28,6 +28,7 @@ h1 {
     bottom: 10px;
     left: 35px;
     border-radius: 10px;
+    max-height: 130px;
 }
 
 .add-to-favorite {
