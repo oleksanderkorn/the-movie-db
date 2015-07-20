@@ -2,10 +2,6 @@
     margin-top: 20px;
 }
 
-#movies form {
-    display: inline-table;
-}
-
 .movie {
     position: relative;
     margin: 5px;
@@ -16,6 +12,7 @@
     background-color: #dddddd;
     border-radius: 10px;
     box-shadow: gray 2px 2px 2px 2px;
+    display: inline-table;
 }
 
 .movie-title {
@@ -24,7 +21,7 @@
 
 .movie img {
     position: absolute;
-    bottom: 5px;
+    bottom: 10px;
     left: 35px;
 }
 
@@ -47,4 +44,13 @@
 
 .btn {
     height: 34px;
+    margin-top: -2px;
+}
+
+.pagination-row {
+    text-align: center;
+}
+
+.noSearchValue {
+    display: none;
 }

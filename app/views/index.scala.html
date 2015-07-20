@@ -23,6 +23,7 @@
                 <div class="col-md-4 search-movies">
                     <input class="form-control" id="query" type="text" name="query">
                     <button ng-click="searchMovies()" class="btn btn-primary btn-sm" id="search">Search</button>
+                    <div class="noSearchValue">Please type here a movie title.</div>
                 </div>
                 <div class="col-md-4 add-list">
                 @helper.form(action = routes.Application.addList) {
@@ -35,17 +36,20 @@
                     <button class="btn btn-info btn-sm" id="openList">Open list</button>
                 </div>
             </div>
-            <div class="row" id="movies">
 
+            <div class="pagination-row">
+                <pagination boundary-links="true" ng-show="totalItems != 0" total-items="totalItems" max-size="maxSize"
+                items-per-page="itemsPerPage" ng-model="currentPage" ng-change="changePage()"></pagination>
             </div>
-            <div class="row">
-                <ul>
-                    <li ng-repeat="mov in movieList">
-                        <span>{{mov.title}}</span>
-                        <p>{{mov.poster_path}}</p>
-                    </li>
-                </ul>
+
+            <div class="row" id="movies">
+                <div ng-repeat="mov in movieList" class="movie">
+                    <div ng-click="addToFavorite()" class='favorite-button-add'></div>
+                    <div class='movie-title'>{{mov.title}}</div>
+                    <img name="posterPath" ng-src="{{mov.poster_path}}">
+                </div>
             </div>
+
         </div>
     </body>
 </html>
