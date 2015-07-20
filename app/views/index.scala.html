@@ -17,7 +17,7 @@
         </script>
     </head>
 
-    <body ng-controller="MoviesCtrl">
+    <body ng-controller="MoviesCtrl" ng-init="readFavoriteList()">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 search-movies">
@@ -26,13 +26,14 @@
                     <div class="noSearchValue">Please type here a movie title.</div>
                 </div>
                 <div class="col-md-4 add-list">
-                @helper.form(action = routes.Application.addList) {
                     <input class="form-control" type="text" name="listName">
-                    <button class="btn btn-success btn-sm" id="createList">New list</button>
-                }
+                    <button ng-click="createList()" class="btn btn-success btn-sm" id="createList">New list</button>
                 </div>
                 <div class="col-md-4 open-list form-group">
-                    <select class="form-control" id="favoriteList"></select>
+                    <select class="form-control" id="favoriteList">
+                        <option ng-repeat="favListItem in favoriteList"
+                        value="$index" listId="1">{{favListItem.listName}}</option>
+                    </select>
                     <button class="btn btn-info btn-sm" id="openList">Open list</button>
                 </div>
             </div>
@@ -44,7 +45,7 @@
 
             <div class="row" id="movies">
                 <div ng-repeat="mov in movieList" class="movie">
-                    <div ng-click="addToFavorite()" class='favorite-button-add'></div>
+                    <div id="$index" ng-click="addMovieToFavorites($index, mov)" class='favorite-button-add'></div>
                     <div class='movie-title'>{{mov.title}}</div>
                     <img name="posterPath" ng-src="{{mov.poster_path}}">
                 </div>
