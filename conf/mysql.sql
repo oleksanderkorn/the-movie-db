@@ -1,7 +1,4 @@
-# --- Created by Ebean DDL
-# To stop Ebean DDL generation, remove this comment and start using Evolutions
-
-# --- !Ups
+CREATE SCHEMA `themoviedb` ;
 
 create table favorite_list (
   list_id                   integer auto_increment not null,
@@ -23,21 +20,6 @@ create table favorite_list_favorite_movie (
   constraint pk_favorite_list_favorite_movie primary key (favorite_list_list_id, favorite_movie_movie_id))
 ;
 
-
-
 alter table favorite_list_favorite_movie add constraint fk_favorite_list_favorite_movie_favorite_list_01 foreign key (favorite_list_list_id) references favorite_list (list_id) on delete restrict on update restrict;
 
 alter table favorite_list_favorite_movie add constraint fk_favorite_list_favorite_movie_favorite_movie_02 foreign key (favorite_movie_movie_id) references favorite_movie (movie_id) on delete restrict on update restrict;
-
-# --- !Downs
-
-SET FOREIGN_KEY_CHECKS=0;
-
-drop table favorite_list;
-
-drop table favorite_list_favorite_movie;
-
-drop table favorite_movie;
-
-SET FOREIGN_KEY_CHECKS=1;
-
