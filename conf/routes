@@ -5,15 +5,17 @@
 # Home page
 GET         /                    controllers.Application.index
 
-POST        /movie               controllers.Application.addMovie
+GET         /movies              controllers.Application.getMovies
 
-GET         /lists               controllers.Application.lists
+GET         /lists               controllers.Application.getFavoriteLists
 
-POST        /list                controllers.Application.addList
+GET         /favorite            controllers.Application.getFavoriteListById
 
-GET         /favorite            controllers.Application.getListToOpen
+POST        /movie               controllers.Application.addMovieToFavoriteList
 
-GET         /movies              controllers.Application.searchMovies
+POST        /list                controllers.Application.addFavoriteList
+
+
 
 
 # Map static resources from the /public folder to the /assets URL path
