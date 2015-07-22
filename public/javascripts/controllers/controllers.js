@@ -1,5 +1,4 @@
-angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', function ($scope, $http) {
-
+angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', function ($scope, HttpPostRequestService) {
     $scope.currentSearchText;
     $scope.movieList = [];
     $scope.currentPage = 1;
@@ -8,10 +7,7 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
     $scope.itemsPerPage = 20;
     $scope.maxSearchResult = 20000;
     $scope.favoriteLists;
-
-    $scope.setPage = function (pageNo) {
-        $scope.currentPage = pageNo;
-    };
+    $scope.httpPostService = HttpPostRequestService;
 
     $scope.changePage = function () {
         $scope.movieList = [];
@@ -74,20 +70,9 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
                 var data = {
                     publicId: mov.publicId,
                     title: mov.title,
-                    posterPath: mov.poster_path,
+                    posterPath: mov.poster_path
                 };
-                $http({
-                    method: 'POST',
-                    url: "/movie/" + selectedListId,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    transformRequest: function (obj) {
-                        var str = [];
-                        for (var p in obj)
-                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                        return str.join("&");
-                    },
-                    data: data
-                });
+                $scope.httpPostService("/movie/" + selectedListId, data);
             }
         } else {
             alert("Create a list first.");
@@ -107,17 +92,7 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
                 }
             });
             if (uniqueName) {
-                $http({
-                    method: 'POST',
-                    url: "/list/" + listName,
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    transformRequest: function (obj) {
-                        var str = [];
-                        for (var p in obj)
-                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                        return str.join("&");
-                    }
-                }).success(function () {
+                $scope.httpPostService("/list/" + listName).success(function () {
                     $scope.readFavoriteList();
                     $('.no-list-exist').hide();
                     $("input[name='listName']").val('');
@@ -136,4 +111,20 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
             $('.no-list-exist').show();
         }
     };
-});
+}).factory('HttpPostRequestService',
+    function($http) {
+        return function(url, data) {
+            return $http({
+                method: 'POST',
+                url: url,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                transformRequest: function (obj) {
+                    var str = [];
+                    for (var p in obj)
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    return str.join("&");
+                },
+                data: data
+            });
+        }
+    });
