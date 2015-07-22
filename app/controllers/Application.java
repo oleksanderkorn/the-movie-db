@@ -59,18 +59,13 @@ public class Application extends Controller {
     }
 
     public Result addMovieToFavoriteList() {
-
-        int listId = Integer.parseInt(Form.form(FavoriteMovie.class).bindFromRequest().data().get(ID));
-
-        FavoriteList list = (FavoriteList) finder.byId(listId);
-        FavoriteMovie movie = Form.form(FavoriteMovie.class).bindFromRequest().get();
-
+        Form<FavoriteMovie> movieForm = Form.form(FavoriteMovie.class).bindFromRequest();
+        FavoriteMovie movie = movieForm.get();
+        FavoriteList list = (FavoriteList) finder.byId(Integer.parseInt(movieForm.data().get(ID)));
         movie.favorites.add(list);
         movie.save();
-
         list.movies.add(movie);
         list.save();
-
         return created();
     }
 
