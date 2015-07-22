@@ -1,4 +1,5 @@
 angular.module('themoviedbApp', ['ui.bootstrap', 'ui.router']).controller('MoviesCtrl', function ($scope, $http, $location, $state) {
+
     $scope.currentSearchText;
     $scope.movieList = [];
     $scope.currentPage = 1;
@@ -65,7 +66,7 @@ angular.module('themoviedbApp', ['ui.bootstrap', 'ui.router']).controller('Movie
             var data = {
                 title: mov.title,
                 posterPath: mov.poster_path,
-                listId: $('#favoriteList').find(":selected").attr("listId")
+                id: $('#favoriteList').find(":selected").attr("listId")
             };
             $http({
                 method: 'POST',
@@ -97,7 +98,7 @@ angular.module('themoviedbApp', ['ui.bootstrap', 'ui.router']).controller('Movie
                         str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
                     return str.join("&");
                 },
-                data: {listName: $("input[name='listName']").val()}
+                data: {name: $("input[name='listName']").val()}
             }).success(function () {
                 $scope.readFavoriteList();
                 $('.no-list-exist').hide();
@@ -119,7 +120,7 @@ angular.module('themoviedbApp', ['ui.bootstrap', 'ui.router']).controller('Movie
                     $(this).attr('selected', "selected");
                 }
             });
-            var data = {listId: listId};
+            var data = {id: listId};
             $.get("/favorite", data, function (list) {
                 $state.go("favorite");
                 $scope.currentList = list;

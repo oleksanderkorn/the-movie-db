@@ -11,7 +11,7 @@ public class FavoriteMovie extends Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int movieId;
+    public int id;
 
     public String title;
 

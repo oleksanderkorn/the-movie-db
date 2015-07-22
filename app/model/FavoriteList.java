@@ -11,9 +11,9 @@ public class FavoriteList extends Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int listId;
+    public int id;
 
-    public String listName;
+    public String name;
 
     @ManyToMany(targetEntity = FavoriteMovie.class)
     @JsonManagedReference

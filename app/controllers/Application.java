@@ -20,9 +20,13 @@ public class Application extends Controller {
     @Inject
     private WSClient ws;
 
+    public Model.Finder finder = new Model.Finder(FavoriteList.class);
+
     public static final String SEARCH_MOVIES_URL_API_KEY = "http://api.themoviedb.org/3/search/movie?api_key=fb92ed0bac9cfafe54830e26abe791df&query=";
+    public static final String BAD_REQUEST = "Bad request";
     public static final String QUERY_KEY = "query";
     public static final String PAGE_KEY = "page";
+    public static final String ID = "id";
 
     public F.Promise<Result> getMovies() {
         String query = Form.form(String.class).bindFromRequest().data().get(QUERY_KEY) != null
@@ -35,7 +39,7 @@ public class Application extends Controller {
             if (r.getStatus() == 200) {
                 return ok(r.asJson());
             } else {
-                return badRequest("Bad request");
+                return badRequest(BAD_REQUEST);
             }
         });
 
@@ -44,7 +48,7 @@ public class Application extends Controller {
 
     public Result getFavoriteListById() {
         FavoriteList list = Form.form(FavoriteList.class).bindFromRequest().get();
-        list = (FavoriteList) new Model.Finder(FavoriteList.class).byId(list.listId);
+        list = (FavoriteList) finder.byId(list.id);
         return ok(toJson(list));
     }
 
@@ -55,18 +59,23 @@ public class Application extends Controller {
     }
 
     public Result addMovieToFavoriteList() {
-        int listId = Integer.parseInt(Form.form(FavoriteMovie.class).bindFromRequest().data().get("listId"));
-        FavoriteList list = (FavoriteList) new Model.Finder(FavoriteList.class).byId(listId);
+
+        int listId = Integer.parseInt(Form.form(FavoriteMovie.class).bindFromRequest().data().get(ID));
+
+        FavoriteList list = (FavoriteList) finder.byId(listId);
         FavoriteMovie movie = Form.form(FavoriteMovie.class).bindFromRequest().get();
+
         movie.favorites.add(list);
         movie.save();
+
         list.movies.add(movie);
         list.save();
+
         return created();
     }
 
     public Result getFavoriteLists() {
-        List<FavoriteList> lists = new Model.Finder(FavoriteList.class).all();
+        List<FavoriteList> lists = finder.all();
         return ok(toJson(lists));
     }
 

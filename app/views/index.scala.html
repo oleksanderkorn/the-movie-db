@@ -31,7 +31,7 @@
                     <div class="col-md-4 open-list form-group">
                         <select class="form-control" id="favoriteList">
                             <option ng-repeat="favListItem in favoriteList"
-                            value="$index" listId="{{favListItem.listId}}">{{favListItem.listName}}</option>
+                            value="$index" listId="{{favListItem.id}}">{{favListItem.name}}</option>
                         </select>
                             <button ng-click="openFavoriteList()" class="btn btn-info btn-sm" id="openList">Open list</button>
                             <div class="no-list-exist">There is no any list yet.</div>
