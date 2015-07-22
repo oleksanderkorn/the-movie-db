@@ -3,7 +3,19 @@ h2 {
 }
 
 .container {
+    margin-top: 10px;
+}
+
+.container-fluid.main-buttons {
     margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 0px!important;
+}
+
+.main-buttons {
+    min-height: 54px;
 }
 
 .movie {
@@ -49,6 +61,7 @@ h2 {
     text-align: center;
 }
 
+.existing-name,
 .no-search-value,
 .no-list-exist,
 .no-list-name {

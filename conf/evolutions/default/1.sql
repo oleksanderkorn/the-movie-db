@@ -11,6 +11,7 @@ create table favorite_list (
 
 create table favorite_movie (
   id                        integer not null,
+  public_id                 integer,
   title                     varchar(255),
   poster_path               varchar(255),
   constraint pk_favorite_movie primary key (id))
