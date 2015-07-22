@@ -20,22 +20,22 @@
             <div class="container-fluid main-buttons">
                 <div class="row">
                     <div class="col-md-4 index-movies">
-                        <input class="form-control" id="query" type="text" name="query">
+                        <input class="form-control" id="query" type="text" ng-model="query" name="query">
                         <button ng-click="searchMovies()" class="btn btn-primary btn-sm" id="index">Search</button>
-                        <div class="no-search-value">Please type here a movie title.</div>
+                        <div class="no-search-value" ng-show="showNoSearchValue">Please type here a movie title.</div>
                     </div>
                     <div class="col-md-4 add-list">
-                        <input class="form-control" type="text" name="listName">
+                        <input class="form-control" type="text" ng-model="listName" name="listName">
                         <button ng-click="createList()" class="btn btn-success btn-sm" id="createList">New list</button>
-                        <div class="no-list-name">Please enter a list name.</div>
-                        <div class="existing-name">A list with this name already exists.</div>
+                        <div class="no-list-name" ng-show="noListName">Please enter a list name.</div>
+                        <div class="existing-name" ng-show="existingName">A list with this name already exists.</div>
                     </div>
                     <div class="col-md-4 open-list form-group">
                         <select class="form-control" id="favoriteList">
                             <option ng-repeat="list in favoriteLists" listId="{{list.id}}">{{list.name}}</option>
                         </select>
-                            <button ng-click="openFavoriteList()" class="btn btn-info btn-sm" id="openList">Open list</button>
-                            <div class="no-list-exist">There is no any list yet.</div>
+                        <button ng-click="openFavoriteList()" class="btn btn-info btn-sm" id="openList">Open list</button>
+                        <div class="no-list-exist" ng-show="noListExist">There is no any list yet.</div>
                     </div>
                 </div>
             </div>

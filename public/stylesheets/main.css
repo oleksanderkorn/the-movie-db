@@ -60,10 +60,3 @@ h2 {
 .pagination-row {
     text-align: center;
 }
-
-.existing-name,
-.no-search-value,
-.no-list-exist,
-.no-list-name {
-    display: none;
-}

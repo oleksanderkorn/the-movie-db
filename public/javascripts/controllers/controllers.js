@@ -8,6 +8,10 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
     $scope.maxSearchResult = 20000;
     $scope.favoriteLists;
     $scope.httpPostService = HttpPostRequestService;
+    $scope.showNoSearchValue = false;
+    $scope.existingName = false;
+    $scope.noListName = false;
+    $scope.noListExist = false;
 
     $scope.changePage = function () {
         $scope.movieList = [];
@@ -18,9 +22,10 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
     };
 
     $scope.searchMovies = function () {
-        $('.no-search-value').hide();
+        $scope.showNoSearchValue = false;
+        $scope.existingName = false;
         $scope.currentPage = 1;
-        $scope.currentSearchText = $('#query').val();
+        $scope.currentSearchText = $scope.query;
         if ($scope.currentSearchText) {
             $scope.movieList = [];
             $.get('/movies/' + $scope.currentSearchText + "/1", function (data) {
@@ -30,7 +35,7 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
                 $scope.$apply();
             });
         } else {
-            $('.no-search-value').show();
+            $scope.showNoSearchValue = true;
         }
     };
 
@@ -80,26 +85,26 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
     };
 
     $scope.createList = function () {
-        $('.no-list-name').hide();
-        $('.existing-name').hide();
-        var listName = $("input[name='listName']").val().trim();
+        $scope.noListName = false;
+        $scope.existingName = false;
+        var listName = $scope.listName ? $scope.listName.trim() : null;
         if (listName) {
             var uniqueName = true;
             $.each($scope.favoriteLists, function (i, item) {
                 if (listName == item.name) {
                     uniqueName = false;
-                    $('.existing-name').show();
+                    $scope.existingName = true;
                 }
             });
             if (uniqueName) {
                 $scope.httpPostService("/list/" + listName).success(function () {
                     $scope.readFavoriteList();
-                    $('.no-list-exist').hide();
-                    $("input[name='listName']").val('');
+                    $scope.noListExist = false;
+                    $scope.listName = '';
                 });
             }
         } else {
-            $('.no-list-name').show();
+            $scope.noListName = true;
         }
     };
 
@@ -108,12 +113,12 @@ angular.module('themoviedbApp', ['ui.bootstrap']).controller('MoviesCtrl', funct
         if (listId) {
             location.pathname = "/list/" + listId;
         } else {
-            $('.no-list-exist').show();
+            $scope.noListExist = true;
         }
     };
 }).factory('HttpPostRequestService',
-    function($http) {
-        return function(url, data) {
+    function ($http) {
+        return function (url, data) {
             return $http({
                 method: 'POST',
                 url: url,
